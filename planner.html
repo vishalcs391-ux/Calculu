@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Study Planner — SuperStudy</title>
+<link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+  <div class="navbar">
+    <div class="logo">📚 SuperStudy</div>
+    <nav>
+      <a href="dashboard.html">Dashboard</a>
+      <a href="upload.html">Upload</a>
+      <a href="planner.html">Planner</a>
+      <a href="tutor.html">AI Tutor</a>
+      <a href="#" id="logout-btn">Log out</a>
+    </nav>
+  </div>
+  <div class="container" style="max-width:520px;">
+    <h1>Study Planner</h1>
+    <div class="card">
+      <form id="plan-form">
+        <label>Topics (comma-separated)</label>
+        <input type="text" id="topics" placeholder="Biology, Chemistry, History" required />
+        <label>Exam date (optional)</label>
+        <input type="text" id="exam-date" placeholder="YYYY-MM-DD" />
+        <label>Minutes per day</label>
+        <input type="number" id="minutes" value="30" min="10" max="240" />
+        <button type="submit" class="btn">Generate Plan</button>
+      </form>
+    </div>
+    <div id="plan-status"></div>
+    <h1 style="margin-top:24px;">Your Plan</h1>
+    <div id="planner-list"><p class="loading">Loading...</p></div>
+  </div>
+  <script type="module">
+    import { requireAuth, wireLogout } from "./js/auth.js";
+    import { apiGet, apiPost, apiPatch } from "./js/api.js";
+
+    requireAuth(async () => {
+      wireLogout();
+      await renderPlan();
+
+      document.getElementById("plan-form").addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const topics = document.getElementById("topics").value.split(",").map(t => t.trim()).filter(Boolean);
+        const examDateVal = document.getElementById("exam-date").value;
+        const payload = {
+          topics,
+          minutes_per_day: parseInt(document.getElementById("minutes").value, 10),
+        };
+        if (examDateVal) payload.exam_date = new Date(examDateVal).toISOString();
+        const statusEl = document.getElementById("plan-status");
+        statusEl.textContent = "Generating plan...";
+        statusEl.className = "loading";
+        try {
+          await apiPost("/study/planner", payload);
+          statusEl.textContent = "Plan created!";
+          await renderPlan();
+        } catch (err) {
+          statusEl.textContent = `Error: ${err.message}`;
+          statusEl.className = "error-box";
+        }
+      });
+    });
+
+    async function renderPlan() {
+      const el = document.getElementById("planner-list");
+      try {
+        const sessions = await apiGet("/study/planner");
+        if (!sessions.length) { el.innerHTML = `<p class="muted">No plan yet — create one above.</p>`; return; }
+        el.innerHTML = sessions.map(s => `
+          <div class="card" style="display:flex;justify-content:space-between;align-items:center;">
+            <div>
+              <strong>${s.topic}</strong><br/>
+              <span class="muted">${new Date(s.scheduled_at).toLocaleDateString()} · ${s.duration_minutes} min</span>
+            </div>
+            ${s.status !== "done" ? `<button class="btn secondary" data-id="${s.id}">Mark done</button>` : `<span class="muted">✓ done</span>`}
+          </div>`).join("");
+        el.querySelectorAll("button[data-id]").forEach(btn => {
+          btn.addEventListener("click", async () => {
+            await apiPatch(`/study/planner/${btn.dataset.id}/complete`);
+            await renderPlan();
+          });
+        });
+      } catch (e) {
+        el.innerHTML = `<div class="error-box">${e.message}</div>`;
+      }
+    }
+  </script>
+</body>
+</html>

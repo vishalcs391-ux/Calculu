@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>AI Tutor — SuperStudy</title>
+<link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+  <div class="navbar">
+    <div class="logo">📚 SuperStudy</div>
+    <nav>
+      <a href="dashboard.html">Dashboard</a>
+      <a href="upload.html">Upload</a>
+      <a href="planner.html">Planner</a>
+      <a href="tutor.html">AI Tutor</a>
+      <a href="#" id="logout-btn">Log out</a>
+    </nav>
+  </div>
+  <div class="container" style="max-width:640px;">
+    <h1>AI Tutor Chat</h1>
+    <div class="chat-window" id="chat-window"></div>
+    <form id="chat-form" style="display:flex; gap:8px;">
+      <input type="text" id="chat-input" placeholder="Ask anything about your studies..." style="margin:0;" />
+      <button type="submit" class="btn">Send</button>
+    </form>
+  </div>
+  <script type="module" src="js/tutor.js"></script>
+</body>
+</html>

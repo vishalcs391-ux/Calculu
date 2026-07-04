@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>AI Super Study Platform — Sign In</title>
+<link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+  <div class="navbar">
+    <div class="logo">📚 SuperStudy</div>
+  </div>
+  <div class="container" style="max-width:420px;">
+    <div class="card">
+      <h1>Welcome back</h1>
+      <p class="muted">Sign in to start studying smarter.</p>
+      <div id="auth-error" class="error-box" style="display:none;"></div>
+      <form id="auth-form">
+        <input type="email" id="email" placeholder="Email" required />
+        <input type="password" id="password" placeholder="Password" required />
+        <button type="submit" class="btn" id="submit-btn" style="width:100%;">Sign In</button>
+      </form>
+      <p style="text-align:center; margin-top:12px;">
+        <a href="#" id="toggle-mode">Need an account? Sign up</a>
+      </p>
+    </div>
+  </div>
+  <script type="module">
+    import { initAuthForm } from "./js/auth.js";
+    initAuthForm();
+  </script>
+</body>
+</html>

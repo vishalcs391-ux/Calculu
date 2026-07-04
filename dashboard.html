@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Dashboard — SuperStudy</title>
+<link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+  <div class="navbar">
+    <div class="logo">📚 SuperStudy</div>
+    <nav>
+      <a href="dashboard.html">Dashboard</a>
+      <a href="upload.html">Upload</a>
+      <a href="planner.html">Planner</a>
+      <a href="tutor.html">AI Tutor</a>
+      <a href="#" id="logout-btn">Log out</a>
+    </nav>
+  </div>
+  <div class="container">
+    <h1>Your Progress</h1>
+    <div id="progress-summary"><p class="loading">Loading...</p></div>
+
+    <h1 style="margin-top:32px;">Upcoming Study Sessions</h1>
+    <div id="planner-list"><p class="loading">Loading...</p></div>
+  </div>
+  <script type="module" src="js/dashboard.js"></script>
+</body>
+</html>

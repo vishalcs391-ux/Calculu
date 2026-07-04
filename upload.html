@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Upload — SuperStudy</title>
+<link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+  <div class="navbar">
+    <div class="logo">📚 SuperStudy</div>
+    <nav>
+      <a href="dashboard.html">Dashboard</a>
+      <a href="upload.html">Upload</a>
+      <a href="planner.html">Planner</a>
+      <a href="tutor.html">AI Tutor</a>
+      <a href="#" id="logout-btn">Log out</a>
+    </nav>
+  </div>
+  <div class="container">
+    <h1>Add Study Material</h1>
+    <div class="grid">
+      <div class="card">
+        <h2>📄 Upload a PDF</h2>
+        <form id="pdf-form">
+          <input type="file" id="pdf-file" accept="application/pdf" required />
+          <button type="submit" class="btn">Upload & Generate Notes</button>
+        </form>
+      </div>
+      <div class="card">
+        <h2>▶️ Paste a YouTube Link</h2>
+        <form id="youtube-form">
+          <input type="text" id="youtube-url" placeholder="https://youtube.com/watch?v=..." required />
+          <button type="submit" class="btn">Fetch & Generate Notes</button>
+        </form>
+      </div>
+    </div>
+
+    <div id="upload-status" class="loading" style="display:none;"></div>
+
+    <h1 style="margin-top:32px;">Your Sources</h1>
+    <div id="source-list"><p class="loading">Loading...</p></div>
+  </div>
+  <script type="module" src="js/upload.js"></script>
+</body>
+</html>

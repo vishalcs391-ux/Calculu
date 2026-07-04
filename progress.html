@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Progress — SuperStudy</title>
+<link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+  <div class="navbar">
+    <div class="logo">📚 SuperStudy</div>
+    <nav>
+      <a href="dashboard.html">Dashboard</a>
+      <a href="upload.html">Upload</a>
+      <a href="planner.html">Planner</a>
+      <a href="tutor.html">AI Tutor</a>
+      <a href="#" id="logout-btn">Log out</a>
+    </nav>
+  </div>
+  <div class="container">
+    <h1>Progress Tracker</h1>
+    <div id="progress-summary"><p class="loading">Loading...</p></div>
+    <h2 style="margin-top:24px;">Daily Activity</h2>
+    <div id="progress-days"></div>
+  </div>
+  <script type="module">
+    import { requireAuth, wireLogout } from "./js/auth.js";
+    import { apiGet } from "./js/api.js";
+
+    requireAuth(async () => {
+      wireLogout();
+      const summaryEl = document.getElementById("progress-summary");
+      const daysEl = document.getElementById("progress-days");
+      try {
+        const data = await apiGet("/progress?days=30");
+        summaryEl.innerHTML = `
+          <div class="grid">
+            <div class="card"><div class="stat-value">${data.current_streak}</div><div class="muted">Day streak</div></div>
+            <div class="card"><div class="stat-value">${data.total_study_minutes}</div><div class="muted">Minutes studied</div></div>
+            <div class="card"><div class="stat-value">${data.quizzes_taken}</div><div class="muted">Quizzes taken</div></div>
+            <div class="card"><div class="stat-value">${data.avg_quiz_score ?? "-"}</div><div class="muted">Avg quiz score %</div></div>
+          </div>`;
+        daysEl.innerHTML = data.days.slice().reverse().map(d => `
+          <div class="card" style="display:flex; justify-content:space-between;">
+            <span>${d.metric_date}</span>
+            <span class="muted">${d.flashcards_reviewed} cards · ${d.quizzes_taken} quizzes · ${d.study_minutes} min</span>
+          </div>`).join("") || `<p class="muted">No activity yet.</p>`;
+      } catch (e) {
+        summaryEl.innerHTML = `<div class="error-box">${e.message}</div>`;
+      }
+    });
+  </script>
+</body>
+</html>

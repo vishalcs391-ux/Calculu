@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Flashcards — SuperStudy</title>
+<link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+  <div class="navbar">
+    <div class="logo">📚 SuperStudy</div>
+    <nav>
+      <a href="dashboard.html">Dashboard</a>
+      <a href="upload.html">Upload</a>
+      <a href="planner.html">Planner</a>
+      <a href="tutor.html">AI Tutor</a>
+      <a href="#" id="logout-btn">Log out</a>
+    </nav>
+  </div>
+  <div class="container" style="max-width:520px;">
+    <h1>Flashcards</h1>
+    <p class="muted">Click a card to flip it.</p>
+    <div id="flashcard-area"></div>
+    <p style="margin-top:24px;">
+      <a class="btn secondary" href="#" onclick="history.back()">Back</a>
+      <a class="btn" id="go-quiz" href="quiz.html">Take a Quiz on this →</a>
+    </p>
+  </div>
+  <script type="module" src="js/flashcards.js"></script>
+  <script>
+    // Carry the summary_id query param over to the quiz page link
+    const params = new URLSearchParams(window.location.search);
+    const sid = params.get("summary_id");
+    if (sid) document.getElementById("go-quiz").href = `quiz.html?summary_id=${sid}`;
+  </script>
+</body>
+</html>
